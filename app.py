@@ -32,7 +32,7 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     # Replace the URL below with a link to your actual company logo!
-    st.image("https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png", width=200) 
+    st.image("https://stable-chocolate-5b3k6zwiy0.edgeone.app/Talkxo%20logo-01.jpg", width=200) 
 
 # --- 3. Main Interface ---
 st.title("✨ Free AEO Analyzer")
