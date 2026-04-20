@@ -44,4 +44,4 @@ if st.button("Scan My Website"):
                 st.markdown(result)
 
             except Exception as e:
-                st.error("Oops! Something went wrong. Make sure the URL is correct.")
+                st.error("Oops! Something went wrong. Error details: {e}")
