@@ -84,6 +84,9 @@ if st.button("Generate My Dynamic Report", use_container_width=True):
     if not url_input:
         st.warning("Please enter a URL first!")
     else:
+        if not url_input.startswith(('http://', 'https://')):
+            url_input = 'https://' + url_input
+            
         with st.spinner("Scraping site and generating insights..."):
             try:
                 api_key = st.secrets["GEMINI_API_KEY"]
