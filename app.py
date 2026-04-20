@@ -217,7 +217,7 @@ with head2:
                         fig_bars = px.bar(heading_data, x="Type", y="Count", text="Count", 
                                            title="Heading Structure Breakdown",
                                            color_discrete_sequence=['#818cf8', '#c7d2fe'])
-                        fig_bars.update_traces(textposition='inside', marker_line_color='black', marker_line_width=0, opacity=0.9, borderradius=8)
+                        fig_bars.update_traces(textposition='inside', marker_line_color='black', marker_line_width=0, opacity=0.9)
                         fig_bars.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font={'family': "Plus Jakarta Sans"})
                         st.plotly_chart(fig_bars, use_container_width=True)
                         
