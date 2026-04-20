@@ -43,7 +43,6 @@ main_style = """
 st.markdown(main_style, unsafe_allow_html=True)
 
 # --- 2. COMPANY LOGO ---
-# Make sure to replace this with your actual logo link again!
 LOGO_URL = "https://i.im.ge/eBsU8z/talkxo_logo.png"
 
 st.markdown(f'''
@@ -62,13 +61,11 @@ def load_lottieurl(url: str):
     except:
         return None
 
-# Using a more stable GitHub raw link for the animation
 lottie_ai_assist = load_lottieurl("https://raw.githubusercontent.com/andreasbm/web-skills/master/assets/animations/robot.json")
 
 # --- 4. Main Interface Area ---
 head1, head2 = st.columns([1, 4])
 with head1:
-    # THE FIX: If the animation loads, show it. If it fails, show an emoji. No crashing!
     if lottie_ai_assist:
         st_lottie(lottie_ai_assist, speed=1, width=150, height=150, key="ai_robot")
     else:
@@ -78,12 +75,13 @@ with head2:
     st.title("✨ Free AEO Optimization Suite")
     st.write("Does your website build trust with AI Answer Engines? Our analyzer checks for information density, semantic structure, and entity-first optimization to give you an immediate AEO Score and a dynamic roadmap.")
 
-url_input = st.text_input("Enter your website URL (e.g., https://example.com)", placeholder="Enter your website URL...")
+url_input = st.text_input("Enter your website URL (e.g., letshyphen.com)", placeholder="Enter your website URL...")
 
 if st.button("Generate My Dynamic Report", use_container_width=True):
     if not url_input:
         st.warning("Please enter a URL first!")
     else:
+        # AUTO-FIX: Add https:// if the user forgot it
         if not url_input.startswith(('http://', 'https://')):
             url_input = 'https://' + url_input
             
@@ -171,7 +169,57 @@ if st.button("Generate My Dynamic Report", use_container_width=True):
                     fig_pie.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
                     st.plotly_chart(fig_pie, use_container_width=True)
 
-                kpi_media1, kpi_media2, kpi
+                # THIS IS THE LINE THAT WAS MISSING
+                kpi_media1, kpi_media2, kpi_media3 = st.columns(3)
+                
+                with kpi_media1:
+                    st.metric(label="Schema Found?", value="✅ Yes" if analysis_data["has_schema"] else "❌ No", help="Entity data must be provided via Schema.")
+                with kpi_media2:
+                    st.metric(label="Rich Media Count", value=img_count, help="Images and videos build comprehensive answer context.")
+                with kpi_media3:
+                    read_levels = ["4th Grade", "6th Grade", "8th Grade", "10th Grade", "12th Grade", "Grad School"]
+                    read_scores = [0, 20, 40, 60, 80, 100]
+                    read_value = read_scores[read_levels.index(result['readability_grade'])] if result['readability_grade'] in read_levels else 50
+                    fig_read = go.Figure(go.Indicator(
+                        mode = "gauge+number",
+                        value = read_value,
+                        title = {'text': f"Predicted Readability Level<br>Grade: {result['readability_grade']}"},
+                        gauge = {
+                            'axis': {'range': [None, 100], 'tickvals': read_scores, 'ticktext': read_levels},
+                            'bar': {'color': "#666"}, 
+                        }
+                    ))
+                    fig_read.update_layout(paper_bgcolor="rgba(0,0,0,0)", margin=dict(t=50, b=0, l=0, r=0))
+                    st.plotly_chart(fig_read, use_container_width=True)
+                
+                # --- 6. THE AI REPORT ---
+                st.subheader("💡 Answer Engine Intelligence Report")
+                
+                st.markdown(f'''
+                <div class="insight-card">
+                    <h4>🏆 Notable AEO Strengths</h4>
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li>{result['strengths'][0]}</li>
+                        <li>{result['strengths'][1]}</li>
+                    </ul>
+                </div>
+                ''', unsafe_allow_html=True)
+                
+                st.markdown(f'''
+                <div class="insight-card">
+                    <h4>⚠️ Critical AEO Weaknesses</h4>
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li>{result['weaknesses'][0]}</li>
+                        <li>{result['weaknesses'][1]}</li>
+                    </ul>
+                </div>
+                ''', unsafe_allow_html=True)
+                
+                st.markdown('<div class="insight-card"><h4>🛠️ High-Priority Actionable Roadmap (5 Tips)</h4>', unsafe_allow_html=True)
+                for i, tip in enumerate(result['action_items']):
+                    time.sleep(0.1) 
+                    st.markdown(f"* {tip}")
+                st.markdown('</div>', unsafe_allow_html=True) 
 
             except json.JSONDecodeError:
                 st.error("Error: The AI response was not in a valid JSON format. Try scanning again or simplify your test URL.")
