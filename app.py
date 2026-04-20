@@ -19,7 +19,7 @@ if st.button("Scan My Website"):
                 # Setup the AI safely using hidden secrets
                 api_key = st.secrets["GEMINI_API_KEY"]
                 genai.configure(api_key=api_key)
-                model = genai.GenerativeModel('gemini-1.5-flash')
+                model = genai.GenerativeModel('gemini-2.5-flash')
 
                 # Scrape the user's website
                 headers = {'User-Agent': 'Mozilla/5.0'}
